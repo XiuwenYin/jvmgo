@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"jvmgo/ch04/classfile"
 	"jvmgo/ch04/classpath"
-	"strings"
+	"jvmgo/ch04/rtda"
 )
 
 /*/Users/xiuwenyin/go/bin/ch04 -Xjre "/Library/Java/JavaVirtualMachines/jdk1.8.0_271.jdk/Contents/Home/jre/" java.lang.String*/
@@ -21,11 +21,42 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
-	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	className := strings.Replace(cmd.class, ".", "/", -1)
-	cf := loadClass(className, cp)
-	fmt.Println(cmd.class)
-	printClassInfo(cf)
+	frame := rtda.NewFrame(100, 100)
+	testLocalVars(frame.LocalVars())
+	testOperandStack(frame.OperandStack())
+}
+
+//testLocalVars()函数测试局部变量
+func testLocalVars(vars *rtda.LocalVars) {
+	vars.SetInt(0, 100)
+	vars.SetInt(1, -100)
+	vars.SetLong(2, 2997924580)
+	vars.SetLong(4, -2997924580)
+	vars.SetFloat(6, 3.1415926)
+	vars.SetDouble(7, 2.71828182845)
+	vars.SetRef(9, nil)
+	println(vars.GetInt(0))
+	println(vars.GetInt(1))
+	println(vars.GetLong(2))
+	println(vars.GetLong(4))
+}
+
+//testOperandStack()函数测试操作数栈
+func testOperandStack(ops *rtda.OperandStack) {
+	ops.PushInt(100)
+	ops.PushInt(-100)
+	ops.PushLong(2997924580)
+	ops.PushLong(-2997924580)
+	ops.PushFloat(3.1415926)
+	ops.PushDouble(2.71828182845)
+	ops.PushRef(nil)
+	println(ops.PopRef())
+	println(ops.PopDouble())
+	println(ops.PopFloat())
+	println(ops.PopLong())
+	println(ops.PopLong())
+	println(ops.PopInt())
+	println(ops.PopInt())
 }
 
 func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
