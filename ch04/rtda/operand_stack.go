@@ -57,3 +57,25 @@ func (self *OperandStack) PopLong() int64 {
 	high := uint32(self.slots[self.size+1].num)
 	return int64(high)<<32 | int64(low)
 }
+
+//PushDouble double变量先转成long类型，然后按long变量处理
+func (self *OperandStack) PushDouble(val float64) {
+	bits := math.Float64bits(val)
+	self.PushLong(int64(bits))
+}
+func (self *OperandStack) PopDouble() float64 {
+	bits := uint64(self.PopLong())
+	return math.Float64frombits(bits)
+}
+
+//PushRef 引用类型
+func (self *OperandStack) PushRef(ref *Object) {
+	self.slots[self.size].ref = ref
+	self.size++
+}
+func (self *OperandStack) PopRef() *Object {
+	self.size--
+	ref := self.slots[self.size].ref
+	self.slots[self.size].ref = nil
+	return ref
+}
