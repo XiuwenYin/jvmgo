@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"jvmgo/ch04/classfile"
-	"jvmgo/ch04/classpath"
-	"jvmgo/ch04/rtda"
+	"jvmgo/ch05/classfile"
+	"jvmgo/ch05/classpath"
+	"jvmgo/ch05/rtda"
 )
 
-/*/Users/xiuwenyin/go/bin/ch04 -test*/
+/*/Users/xiuwenyin/go/bin/ch05 -Xjre "/Library/Java/JavaVirtualMachines/jdk1.8.0_271.jdk/Contents/Home/jre/" java.lang.String*/
 
 func main() {
 	cmd := parseCmd()
