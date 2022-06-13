@@ -73,6 +73,8 @@ func (self *OperandStack) PushRef(ref *Object) {
 	self.slots[self.size].ref = ref
 	self.size++
 }
+
+//PopRef 弹出引用后，把Slot结构体的ref字段设置成nil，这样 做是为了帮助Go的垃圾收集器回收Object结构体实例
 func (self *OperandStack) PopRef() *Object {
 	self.size--
 	ref := self.slots[self.size].ref
