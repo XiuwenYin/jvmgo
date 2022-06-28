@@ -6,11 +6,6 @@ import (
 )
 
 type I2B struct{ base.NoOperandsInstruction } // int to byte
-type I2C struct{ base.NoOperandsInstruction } // int to char
-type I2S struct{ base.NoOperandsInstruction } // int to short
-type I2L struct{ base.NoOperandsInstruction } // int to long
-type I2F struct{ base.NoOperandsInstruction } // int to float
-type I2D struct{ base.NoOperandsInstruction } // int to double
 
 func (self *I2B) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
@@ -19,12 +14,16 @@ func (self *I2B) Execute(frame *rtda.Frame) {
 	stack.PushInt(b)
 }
 
+type I2C struct{ base.NoOperandsInstruction } // int to char
+
 func (self *I2C) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	i := stack.PopInt()
 	c := int32(uint16(i))
 	stack.PushInt(c)
 }
+
+type I2S struct{ base.NoOperandsInstruction } // int to short
 
 func (self *I2S) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
@@ -33,6 +32,8 @@ func (self *I2S) Execute(frame *rtda.Frame) {
 	stack.PushInt(s)
 }
 
+type I2L struct{ base.NoOperandsInstruction } // int to long
+
 func (self *I2L) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	i := stack.PopInt()
@@ -40,12 +41,16 @@ func (self *I2L) Execute(frame *rtda.Frame) {
 	stack.PushLong(l)
 }
 
+type I2F struct{ base.NoOperandsInstruction } // int to float
+
 func (self *I2F) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	i := stack.PopInt()
 	f := float32(i)
 	stack.PushFloat(f)
 }
+
+type I2D struct{ base.NoOperandsInstruction } // int to double
 
 func (self *I2D) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()

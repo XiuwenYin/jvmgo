@@ -7,14 +7,17 @@ import (
 
 /*栈指令直接对操作数栈进行操作, dup系列指令复制栈顶变量*/
 
+// Duplicate the top operand stack value
 type DUP struct{ base.NoOperandsInstruction }
-type DUP_X1 struct{ base.NoOperandsInstruction }
-type DUP_X2 struct{ base.NoOperandsInstruction }
-type DUP2 struct{ base.NoOperandsInstruction }
-type DUP2_X1 struct{ base.NoOperandsInstruction }
-type DUP2_X2 struct{ base.NoOperandsInstruction }
 
-// Execute DUP复制栈顶的单个变量
+/*Execute
+bottom -> top
+[...][c][b][a]
+             \_
+               |
+               V
+[...][c][b][a][a]
+*/
 func (self *DUP) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	slot := stack.PopSlot()
@@ -22,17 +25,37 @@ func (self *DUP) Execute(frame *rtda.Frame) {
 	stack.PushSlot(slot)
 }
 
-// Execute 将原本的 val1 >> val2 >> ... 变为 val1 >> val2 >> val1 >> ... 不可用与val2为long和double的情况
+// Duplicate the top operand stack value and insert two values down
+type DUP_X1 struct{ base.NoOperandsInstruction }
+
+/*Execute
+bottom -> top
+[...][c][b][a]
+          __/
+         |
+         V
+[...][c][a][b][a]
+*/
 func (self *DUP_X1) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
-	val1 := stack.PopSlot()
-	val2 := stack.PopSlot()
-	stack.PushSlot(val1)
-	stack.PushSlot(val2)
-	stack.PushSlot(val1)
+	slot1 := stack.PopSlot()
+	slot2 := stack.PopSlot()
+	stack.PushSlot(slot1)
+	stack.PushSlot(slot2)
+	stack.PushSlot(slot1)
 }
 
-// Execute 将原本的 val1 >> val2 >> val3 >> ... 变为 val1 >> val2 >> val3 >> val1 >> ...
+// Duplicate the top operand stack value and insert two or three values down
+type DUP_X2 struct{ base.NoOperandsInstruction }
+
+/*Execute
+bottom -> top
+[...][c][b][a]
+       _____/
+      |
+      V
+[...][a][c][b][a]
+*/
 func (self *DUP_X2) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
@@ -44,17 +67,38 @@ func (self *DUP_X2) Execute(frame *rtda.Frame) {
 	stack.PushSlot(slot1)
 }
 
-// Execute 对于long和double，由于占据操作数栈的两个位置，所以pop两个slots，再各push两个回去
+// Duplicate the top one or two operand stack values
+type DUP2 struct{ base.NoOperandsInstruction }
+
+/*Execute
+bottom -> top
+[...][c][b][a]____
+          \____   |
+               |  |
+               V  V
+[...][c][b][a][b][a]
+*/
 func (self *DUP2) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()
-	stack.PushSlot(slot1)
 	stack.PushSlot(slot2)
 	stack.PushSlot(slot1)
 	stack.PushSlot(slot2)
+	stack.PushSlot(slot1)
 }
 
+// Duplicate the top one or two operand stack values and insert two or three values down
+type DUP2_X1 struct{ base.NoOperandsInstruction }
+
+/*Execute
+bottom -> top
+[...][c][b][a]
+       _/ __/
+      |  |
+      V  V
+[...][b][a][c][b][a]
+*/
 func (self *DUP2_X1) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
@@ -67,9 +111,17 @@ func (self *DUP2_X1) Execute(frame *rtda.Frame) {
 	stack.PushSlot(slot1)
 }
 
-/*Execute slot1和slot2应为1个操作数，slot3和slot4可为1个或2个操作数，
-val1 >> val2 >> val3 >> val4 >> ... ->
-val2 >> val1 >> val4 >> val3 >> val2 >> val1 >> ...*/
+// Duplicate the top one or two operand stack values and insert two, three, or four values down
+type DUP2_X2 struct{ base.NoOperandsInstruction }
+
+/*Execute
+bottom -> top
+[...][d][c][b][a]
+       ____/ __/
+      |   __/
+      V  V
+[...][b][a][d][c][b][a]
+*/
 func (self *DUP2_X2) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
@@ -82,5 +134,4 @@ func (self *DUP2_X2) Execute(frame *rtda.Frame) {
 	stack.PushSlot(slot3)
 	stack.PushSlot(slot2)
 	stack.PushSlot(slot1)
-
 }

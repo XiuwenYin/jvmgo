@@ -3,6 +3,7 @@ package rtda
 import "math"
 
 /*局部变量表*/
+/*并没有对boolean、byte、short和char类型定义存取方法，这些类型的值都可以转换成int值类来处理*/
 
 type LocalVars []Slot
 
@@ -61,5 +62,3 @@ func (self LocalVars) SetRef(index uint, ref *Object) {
 func (self LocalVars) GetRef(index uint) *Object {
 	return self[index].ref
 }
-
-/*请读者注意，我们并没有真的对boolean、byte、short和char类型 定义存取方法，这些类型的值都可以转换成int值类来处理*/

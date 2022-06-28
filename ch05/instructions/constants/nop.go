@@ -5,6 +5,7 @@ import (
 	"jvmgo/ch05/rtda"
 )
 
+// Do nothing
 type NOP struct {
 	base.BranchInstruction
 }

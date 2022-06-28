@@ -20,6 +20,29 @@ func Parse(jreOption, cpOption string) *Classpath {
 	return cp
 }
 
+func (self *Classpath) parseBootAndExtClasspath(jreOption string) {
+	jreDir := getJreDir(jreOption)
+	// jre/lib/*
+	jreLibPath := filepath.Join(jreDir, "lib", "*")
+	self.bootClasspath = newWildcardEntry(jreLibPath)
+	// jre/lib/ext/*
+	jreExtPath := filepath.Join(jreDir, "lib", "ext", "*")
+	self.extClasspath = newWildcardEntry(jreExtPath)
+}
+
+func getJreDir(jreOption string) string {
+	if jreOption != "" && exists(jreOption) {
+		return jreOption
+	}
+	if exists("./jre") {
+		return "./jre"
+	}
+	if jh := os.Getenv("JAVA_HOME"); jh != "" {
+		return filepath.Join(jh, "jre")
+	}
+	panic("Can not find jre folder")
+}
+
 /*ReadClass 方法依次从启动类路径、扩展类路径和用户 类路径中搜索class文件
 传递给ReadClass()方法的类名不包含“.class”后缀*/
 func (self *Classpath) ReadClass(className string) ([]byte, Entry, error) {
@@ -36,35 +59,12 @@ func (self *Classpath) String() string {
 	return self.userClasspath.String()
 }
 
-func (self *Classpath) parseBootAndExtClasspath(jreOption string) {
-	jreDir := getJreDir(jreOption)
-	// jre/lib/*
-	jreLibPath := filepath.Join(jreDir, "lib", "*")
-	self.bootClasspath = newWildcardEntry(jreLibPath)
-	// jre/lib/ext/*
-	jreExtPath := filepath.Join(jreDir, "lib", "ext", "*")
-	self.extClasspath = newWildcardEntry(jreExtPath)
-}
-
 func (self *Classpath) parseUserClasspath(cpOption string) {
 	if cpOption == "" {
 		cpOption = "."
 	}
 	self.userClasspath = newEntry(cpOption)
 
-}
-
-func getJreDir(jreOption string) string {
-	if jreOption != "" && exists(jreOption) {
-		return jreOption
-	}
-	if exists("./jre") {
-		return "./jre"
-	}
-	if jh := os.Getenv("JAVA_HOME"); jh != "" {
-		return filepath.Join(jh, "jre")
-	}
-	panic("Can not find jre folder")
 }
 
 func exists(path string) bool {

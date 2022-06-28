@@ -7,7 +7,7 @@ import (
 
 type CompositeEntry []Entry
 
-/* newCompositeEntry 构造函数把参数(路 径列表)按分隔符分成小路径，然后把每个小路径都转换成具体的 Entry实例 */
+/* newCompositeEntry 构造函数把参数(路径列表)按分隔符分成小路径，然后把每个小路径都转换成具体的Entry实例 */
 func newCompositeEntry(pathList string) CompositeEntry {
 	compositeEntry := []Entry{}
 	for _, path := range strings.Split(pathList, pathListSeparator) {
@@ -31,7 +31,7 @@ func (self CompositeEntry) readClass(className string) ([]byte, Entry, error) {
 	return nil, nil, errors.New("class not found: " + className)
 }
 
-/*调用每一个子路径的String()方法，然 后把得到的字符串用路径分隔符拼接起来即可 */
+/*调用每一个子路径的String()方法，然后把得到的字符串用路径分隔符拼接起来即可 */
 func (self CompositeEntry) String() string {
 	strs := make([]string, len(self))
 	for i, entry := range self {

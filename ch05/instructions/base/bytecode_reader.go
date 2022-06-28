@@ -11,6 +11,11 @@ func (self *BytecodeReader) Reset(code []byte, pc int) {
 	self.pc = pc
 }
 
+// PC get方法
+func (self *BytecodeReader) PC() int {
+	return self.pc
+}
+
 func (self *BytecodeReader) ReadUint8() uint8 {
 	i := self.code[self.pc]
 	self.pc++
@@ -42,6 +47,7 @@ func (self *BytecodeReader) ReadInt32() int32 {
 	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4
 }
 
+// ReadInt32s used by lookupswitch and tableswitch
 func (self *BytecodeReader) ReadInt32s(n int32) []int32 {
 	ints := make([]int32, n)
 	for i := range ints {
@@ -50,6 +56,7 @@ func (self *BytecodeReader) ReadInt32s(n int32) []int32 {
 	return ints
 }
 
+// SkipPadding used by lookupswitch and tableswitch
 func (self *BytecodeReader) SkipPadding() {
 	for self.pc%4 != 0 {
 		self.ReadUint8()

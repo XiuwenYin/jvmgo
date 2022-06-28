@@ -4,7 +4,6 @@ import "jvmgo/ch05/instructions/base"
 import "jvmgo/ch05/rtda"
 
 // Branch if int comparison succeeds
-
 type IF_ICMPEQ struct{ base.BranchInstruction }
 
 func (self *IF_ICMPEQ) Execute(frame *rtda.Frame) {
