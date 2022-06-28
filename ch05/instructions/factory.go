@@ -198,10 +198,10 @@ func NewInstruction(opcode byte) base.Instruction {
 		return dconst_0
 	case 0x0f:
 		return dconst_1
-	//case 0x10:
-	//	return &BIPUSH{}
-	//case 0x11:
-	//	return &SIPUSH{} // 到这上两位未实现
+	case 0x10:
+		return &BIPUSH{}
+	case 0x11:
+		return &SIPUSH{}
 	// case 0x12:
 	// 	return &LDC{}
 	// case 0x13:
@@ -510,20 +510,20 @@ func NewInstruction(opcode byte) base.Instruction {
 		return &TABLE_SWITCH{}
 	case 0xab:
 		return &LOOKUP_SWITCH{}
-	// case 0xac:
-	// 	return ireturn
-	// case 0xad:
-	// 	return lreturn
-	// case 0xae:
-	// 	return freturn
-	// case 0xaf:
-	// 	return dreturn
-	// case 0xb0:
-	// 	return areturn
-	// case 0xb1:
-	// 	return _return
-	//	case 0xb2:
-	//		return &GET_STATIC{}
+	//case 0xac:
+	//	return ireturn
+	//case 0xad:
+	//	return lreturn
+	//case 0xae:
+	//	return freturn
+	//case 0xaf:
+	//	return dreturn
+	//case 0xb0:
+	//	return areturn
+	//case 0xb1:
+	//	return _return
+	//case 0xb2:
+	//	return &GET_STATIC{}
 	// case 0xb3:
 	// 	return &PUT_STATIC{}
 	// case 0xb4:
